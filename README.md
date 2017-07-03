@@ -4,6 +4,10 @@ These scripts aid in setting up your current ADS-B receiver to feed ADS-B Exchan
 
 ### Obtaining And Using The Scripts
 
+The install script uses python, which doesn't come with some images, such as PiAware. So:
+
+    sudo apt-get install python
+
 Running the following commands will download the contents of this repository and begin setup.
 
     sudo apt-get install git
