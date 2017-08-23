@@ -28,11 +28,13 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
-## CHECK IF SCRIPT WAS RAN USING SUDO
+## CHECK IF SCRIPT WAS RUN USING SUDO
 
 if [ "$(id -u)" != "0" ]; then
     echo -e "\033[33m"
-    echo "This script must be ran using sudo or as root."
+    echo "This script must be run using sudo or as root."
+    echo "Please execute the following command:"
+    echo -e "\tsudo ./setup.sh"
     echo -e "\033[37m"
     exit 1
 fi
@@ -40,7 +42,7 @@ fi
 ## CHECK FOR PACKAGES NEEDED BY THIS SCRIPT
 
 echo -e "\033[33m"
-echo "Checking for packages needed to run this script..."
+echo "Checking for required packages..."
 
 if [ $(dpkg-query -W -f='${STATUS}' curl 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     echo "Installing the curl package..."
@@ -68,8 +70,8 @@ fi
 
 ADSBEXCHANGEUSERNAME=$(whiptail --backtitle "$BACKTITLETEXT" --title "ADS-B Exchange User Name" --nocancel --inputbox "\nPlease enter your ADS-B Exchange user name.\n\nIf you have more than one receiver, this username should be unique.\nExample: \"username-01\", \"username-02\", etc." 12 78 3>&1 1>&2 2>&3)
 RECEIVERLATITUDE=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Latitude" --nocancel --inputbox "\nEnter your receivers latitude." 9 78 3>&1 1>&2 2>&3)
-RECEIVERLONGITUDE=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Longitude" --nocancel --inputbox "\nEnter your recivers longitude." 9 78 3>&1 1>&2 2>&3)
-RECEIVERALTITUDE=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Longitude" --nocancel --inputbox "\nEnter your recivers atitude." 9 78 "`curl -s https://maps.googleapis.com/maps/api/elevation/json?locations=$RECEIVERLATITUDE,$RECEIVERLONGITUDE | python -c "import json,sys;obj=json.load(sys.stdin);print obj['results'][0]['elevation'];"`" 3>&1 1>&2 2>&3)
+RECEIVERLONGITUDE=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Longitude" --nocancel --inputbox "\nEnter your receivers longitude." 9 78 3>&1 1>&2 2>&3)
+RECEIVERALTITUDE=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Altitude" --nocancel --inputbox "\nEnter your receivers atitude in meters." 9 78 "`curl -s https://maps.googleapis.com/maps/api/elevation/json?locations=$RECEIVERLATITUDE,$RECEIVERLONGITUDE | python -c "import json,sys;obj=json.load(sys.stdin);print obj['results'][0]['elevation'];"`" 3>&1 1>&2 2>&3)
 
 whiptail --backtitle "$BACKTITLETEXT" --title "$BACKTITLETEXT" --yesno "We are now ready to begin setting up your receiver to feed ADS-B Exchange.\n\nDo you wish to proceed?" 9 78
 CONTINUESETUP=$?
