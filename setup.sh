@@ -70,6 +70,9 @@ ADSBEXCHANGEUSERNAME=$(whiptail --backtitle "$BACKTITLETEXT" --title "ADS-B Exch
 RECEIVERLATITUDE=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Latitude" --nocancel --inputbox "\nEnter your receivers latitude." 9 78 3>&1 1>&2 2>&3)
 RECEIVERLONGITUDE=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Longitude" --nocancel --inputbox "\nEnter your receivers longitude." 9 78 3>&1 1>&2 2>&3)
 RECEIVERALTITUDE=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Altitude" --nocancel --inputbox "\nEnter your receivers altitude." 9 78 "`curl -s https://maps.googleapis.com/maps/api/elevation/json?locations=$RECEIVERLATITUDE,$RECEIVERLONGITUDE | python -c "import json,sys;obj=json.load(sys.stdin);print obj['results'][0]['elevation'];"`" 3>&1 1>&2 2>&3)
+RECEIVERPORT=$(whiptail --backtitle "$BACKTITLETEXT" --title "Receiver Feed Port" --nocancel --inputbox "\nChange only if you were assigned a custom feed port.\nFor most all users it is required this port remain set to port 30005." 10 78 "30005" 3>&1 1>&2 2>&3)
+
+exit 0
 
 whiptail --backtitle "$BACKTITLETEXT" --title "$BACKTITLETEXT" --yesno "We are now ready to begin setting up your receiver to feed ADS-B Exchange.\n\nDo you wish to proceed?" 9 78
 CONTINUESETUP=$?
@@ -171,7 +174,7 @@ fi
 while true
   do
     sleep 30
-    /usr/bin/mlat-client --input-type dump1090 --input-connect localhost:30005 --lat $RECEIVERLATITUDE --lon $RECEIVERLONGITUDE --alt $RECEIVERALTITUDE --user $ADSBEXCHANGEUSERNAME --server feed.adsbexchange.com:31090 --no-udp --results beast,connect,localhost:30104
+    /usr/bin/mlat-client --input-type dump1090 --input-connect localhost:$RECEIVERPORT --lat $RECEIVERLATITUDE --lon $RECEIVERLONGITUDE --alt $RECEIVERALTITUDE --user $ADSBEXCHANGEUSERNAME --server feed.adsbexchange.com:31090 --no-udp --results beast,connect,localhost:30104
   done
 EOF
 
@@ -222,7 +225,7 @@ EOF
 while true
   do
     sleep 30
-    /bin/nc 127.0.0.1 30005 | /bin/nc feed.adsbexchange.com 30005
+    /bin/nc 127.0.0.1 $RECEIVERPORT | /bin/nc feed.adsbexchange.com $RECEIVERPORT
   done
 EOF
 
