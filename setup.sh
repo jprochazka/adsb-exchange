@@ -46,7 +46,7 @@ if [ $(dpkg-query -W -f='${STATUS}' curl 2>/dev/null | grep -c "ok installed") -
     echo "Installing the curl package..."
     echo -e "\033[37m"
     sudo apt-get update
-    sudo apt-get install -y curl
+    sudo apt-get install -y curl socat
 fi
 echo -e "\033[37m"
 
@@ -223,7 +223,9 @@ EOF
 while true
   do
     sleep 30
-    /bin/nc 127.0.0.1 $RECEIVERPORT | /bin/nc feed.adsbexchange.com $RECEIVERPORT
+#    /bin/nc 127.0.0.1 30005 | /bin/nc feed.adsbexchange.com $RECEIVERPORT
+    /bin/socat -u TCP:localhost:30005 TCP:feed.adsbexchange.com:$RECEIVERPORT
+
   done
 EOF
 
