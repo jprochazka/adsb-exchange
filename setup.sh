@@ -125,8 +125,8 @@ fi
     echo 22
     sleep 0.25
 
-    if [ $(dpkg-query -W -f='${STATUS}' netcat 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
-        sudo apt-get install -y netcat >> $LOGFILE  2>&1
+    if [ $(dpkg-query -W -f='${STATUS}' socat 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
+        sudo apt-get install -y socat >> $LOGFILE  2>&1
     fi
 
     echo 28
@@ -172,7 +172,7 @@ fi
 while true
   do
     sleep 30
-    /usr/bin/mlat-client --input-type dump1090 --input-connect localhost:$RECEIVERPORT --lat $RECEIVERLATITUDE --lon $RECEIVERLONGITUDE --alt $RECEIVERALTITUDE --user $ADSBEXCHANGEUSERNAME --server feed.adsbexchange.com:31090 --no-udp --results beast,connect,localhost:30104
+    /usr/bin/mlat-client --input-type dump1090 --input-connect localhost:30005 --lat $RECEIVERLATITUDE --lon $RECEIVERLONGITUDE --alt $RECEIVERALTITUDE --user $ADSBEXCHANGEUSERNAME --server feed.adsbexchange.com:31090 --no-udp --results beast,connect,localhost:30104
   done
 EOF
 
@@ -223,7 +223,7 @@ EOF
 while true
   do
     sleep 30
-    /bin/nc 127.0.0.1 $RECEIVERPORT | /bin/nc feed.adsbexchange.com $RECEIVERPORT
+    /usr/bin/socat -u TCP:localhost:30005 TCP:feed.adsbexchange.com:$RECEIVERPORT
   done
 EOF
 
