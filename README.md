@@ -1,4 +1,6 @@
-# ADS-B Exchange feed client
+# ADS-B Exchange Setup Scripts :airplane:
+
+# This repository is no longer updated, please visit: <https://github.com/ADSBexchange/feedclient>
 
 - These scripts aid in setting up your current ADS-B receiver to feed ADS-B Exchange.
 - They will not disrupt any existing feed clients already present
