@@ -1,6 +1,6 @@
 # ADS-B Exchange Setup Scripts :airplane:
 
-## This repository was created before ADS-B Exchange supplied thier own installation scripts and is no longer valid.
+## This repository was created before ADS-B Exchange supplied thier own installation scripts thus no longer maintained.
 
 These scripts aid in setting up your current ADS-B receiver to feed ADS-B Exchange.
 
